@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ai Là Triệu Phú</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        #game-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #444;
+        }
+
+        .question {
+            font-size: 18px;
+            margin: 20px 0;
+        }
+
+        .answers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .answers button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .answers button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            font-size: 20px;
+            font-weight: bold;
+            color: #28a745;
+            margin-top: 20px;
+        }
+
+        .result.wrong {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Ai Là Triệu Phú</h1>
+        <div id="game">
+            <div class="question" id="question">Câu hỏi sẽ hiển thị ở đây</div>
+            <div class="answers" id="answers"></div>
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu câu hỏi
+        const questions = [
+            {
+                question: "Anh Hiệu sinh năm bao nhiêu",
+                options: ["2003", "2001", "2004", "2005"],
+                correct: "2003"
+            },
+            {
+                question: "Quả bưởi ở Thái Bình được gọi là gì",
+                options: ["Quả bòng", "Quả Pòng", "Quả dưa", "Quả Pưởi"],
+                correct: "Quả bòng"
+            },
+            {
+                question: "Con cua lông ở đâu",
+                options: ["Hỏi a hiệu sẽ rõ", "Thái Bình", "Thái Pình", "Quê Sơn Tùng MTP"],
+                correct: "Thái Bình"
+            },
+            {
+                question: "Minus đọc bằng mồm như thế nào",
+                options: ["Mi nhót", "Mi nhớt", "Mi nớt", "Mi nốt"],
+                correct: "Mi nớt"
+            },
+            {
+                question: "Anh Hiệu có tuyệt vời không?",
+                options: ["Quá tuyệt vời", "Anh Trai Say Có", "Không tồi", "Tất cả đáp án trên"],
+                correct: "Tất cả đáp án trên"
+            }
+        ];
+
+        // Biến lưu trạng thái game
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionElement = document.getElementById("question");
+        const answersElement = document.getElementById("answers");
+        const resultElement = document.getElementById("result");
+
+        // Hiển thị câu hỏi
+        function displayQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            questionElement.textContent = currentQuestion.question;
+            answersElement.innerHTML = "";
+
+            // Hiển thị các câu trả lời
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option);
+                answersElement.appendChild(button);
+            });
+        }
+
+        // Kiểm tra câu trả lời
+        function checkAnswer(selectedOption) {
+            const currentQuestion = questions[currentQuestionIndex];
+            if (selectedOption === currentQuestion.correct) {
+                score++;
+                resultElement.textContent = "Chính xác!";
+                resultElement.classList.remove("wrong");
+            } else {
+                resultElement.textContent = "Sai rồi! Đáp án đúng là: " + currentQuestion.correct;
+                resultElement.classList.add("wrong");
+            }
+
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                setTimeout(() => {
+                    resultElement.textContent = "";
+                    displayQuestion();
+                }, 1500); // Chờ 1.5 giây trước khi hiển thị câu tiếp theo
+            } else {
+                setTimeout(() => {
+                    showFinalResult();
+                }, 1500);
+            }
+        }
+
+        // Hiển thị kết quả cuối cùng
+        function showFinalResult() {
+            questionElement.textContent = "Chúc mừng! Bạn đã hoàn thành trò chơi!";
+            answersElement.innerHTML = "";
+            resultElement.textContent = `Bạn trả lời đúng ${score}/${questions.length} câu.`;
+        }
+
+        // Bắt đầu trò chơi
+        displayQuestion();
+    </script>
+</body>
+</html>
